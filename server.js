@@ -1,5 +1,6 @@
 const express = require('express');
 const jobRoutes = require('./routes/jobRoutes');
+require('dotenv').config(); 
 
 const app = express();  
 const port = 3000;
