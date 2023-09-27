@@ -6,4 +6,5 @@ const router = express.Router();
 router.get('/jobs',getJobs);
 //router.get('/jobdetails',jobController.fetchJobDetails);
 
+
 module.exports = router;
