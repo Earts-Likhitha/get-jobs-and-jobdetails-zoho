@@ -1,6 +1,6 @@
 const express = require('express');
 const {getJobs}=require('../model/jobModel')
-const {applyJobs}=require('../model/applyJobs');
+const {applyJobs}=require('../model/jobModel');
 
 const router = express.Router();
 

@@ -51,4 +51,23 @@ const getJobs = async(req,res)=> {
     }
   };
 
-module.exports = {getJobs}
+  const applyJobs = async(req,res)=> {
+    const apiUrl = 'https://recruit.zoho.com/recruit/v2/Candidates';
+    try {
+      if(!storedAccessToken){
+        storedAccessToken=await getAccessToken();
+      }
+      const candidateData=req.body
+      const Response = await axios.post(apiUrl,candidateData,{
+          headers: {
+          Authorization:`Zoho-oauthtoken ${storedAccessToken}`,
+          },
+      })
+      res.status(201).json({Message: "Candidate record Created Successfully"});
+    }
+    catch(error){
+      console.error('Error:', error,error.message);
+      res.status(500).send("Internal Server Error");
+    }
+  };
+module.exports = {getJobs,applyJobs}
