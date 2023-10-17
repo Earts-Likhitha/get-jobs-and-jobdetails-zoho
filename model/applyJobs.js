@@ -1,7 +1,7 @@
 const axios = require('axios');
 require('dotenv').config();
 
-let storedAccessToken = "1000.f67fd47ce372461593f66e96c4bba018.b806b25b9c794688c3b6e67cc4ee5c9e";
+let storedAccessToken = null;
 
 const getAccessToken = async ()=> {
   const tokenUrl = 'https://accounts.zoho.com/oauth/v2/token';
@@ -22,33 +22,24 @@ const getAccessToken = async ()=> {
  };
 
  
-const getJobs = async(req,res)=> {
-    const apiUrl = 'https://recruit.zoho.com/recruit/v2/JobOpenings';
+const applyJobs = async(req,res)=> {
+    const apiUrl = 'https://recruit.zoho.com/recruit/v2/Candidates';
     try {
       if(!storedAccessToken){
         storedAccessToken=await getAccessToken();
       }
-
-      const JobsResponse = await axios.get(apiUrl,{
+      const candidateData=req.body
+      const JobsResponse = await axios.post(apiUrl,candidateData,{
           headers: {
           Authorization:`Zoho-oauthtoken ${storedAccessToken}`,
           },
       })
-      res.status(200).send(JobsResponse);
+      res.status(201).json({Message: "Candidate record Created Successfully"});
     }
     catch(error){
-        if(error.response.status===401){
-          storedAccessToken=await getAccessToken();
-          const JobsResponse = await axios.get(apiUrl,{
-          headers: {
-            Authorization:`Zoho-oauthtoken ${storedAccessToken}`,
-          },
-        })
-        return res.status(200).send(JobsResponse.data);
-      }
       console.error('Error:', error,error.message);
       res.status(500).send("Internal Server Error");
     }
   };
 
-module.exports = {getJobs}
+module.exports = {applyJobs}
